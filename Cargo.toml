@@ -5,3 +5,4 @@ edition = "2024"
 
 [dependencies]
 polymarket-client-sdk = { version = "0.4.1", features = ["ws", "data", "clob", "ctf"] }
+tokio = { version = "1.49.0", features = ["full"] }
