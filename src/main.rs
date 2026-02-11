@@ -24,6 +24,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
     let nn = Decimal::from_str("0.99")?;
 
+    let order_p = client
+        .limit_order()
+        .token_id(token_id)
+        .size(Decimal::TWO)
+        .price(nn)
+        .side(Side::Buy)
+        .build()
+        .await?;
+    let signed_order_p = client.sign(&signer, order_p).await?;
+
     let _instant = std::time::Instant::now();
     let order = client
         .limit_order()
@@ -45,5 +55,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     );
     println!("Order response: {:?}", response);
 
+    let _instant2 = std::time::Instant::now();
+    let response2 = client.post_order(signed_order_p).await?;
+    let response_step2 = _instant2.elapsed();
+    println!("Only send  {:?}", response_step2);
     Ok(())
 }
